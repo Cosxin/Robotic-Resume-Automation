@@ -1,5 +1,6 @@
 {
-	"jobDesc":["Software"],
-	"title":"Software",
-	"selfIntro":"Optional Text"
+	"jobDesc":[""],
+	"jobTitleIncludes":["oftware","stack","Stack"],
+	"jobTitleExcludes":["ackend","ontractor","ntern","eveloper"],
+	"selfIntro":"Hi, I'm a software engineer specialized in Bluetooth, I am also experienced with RPA, Mobile/Fullstack Development. H1B sponsorship is appreciated but not necessary"
 }
