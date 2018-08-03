@@ -69,7 +69,7 @@
   </TextExpression.ReferencesForImplementation>
   <Flowchart DisplayName="AngelList" sap2010:WorkflowViewState.IdRef="Flowchart_1">
     <Flowchart.Variables>
-      <Variable x:TypeArguments="s:String[]" Name="jobKeywords" />
+      <Variable x:TypeArguments="x:String" Name="jobPageUrl" />
       <Variable x:TypeArguments="x:String" Name="selfIntro" />
       <Variable x:TypeArguments="s:String[]" Name="JobTitleIncludes" />
       <Variable x:TypeArguments="sd:DataTable" Default="[New System.Data.DataTable]" Name="ExtractDataTable" />
@@ -89,10 +89,10 @@
                 <ui:DeserializeJson x:TypeArguments="njl:JObject" DisplayName="Deserialize json" sap2010:WorkflowViewState.IdRef="DeserializeJson`1_1" JsonObject="[inputJSONobj]" JsonString="[inputJSON]" />
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_2">
                   <Assign.To>
-                    <OutArgument x:TypeArguments="s:String[]">[jobKeywords]</OutArgument>
+                    <OutArgument x:TypeArguments="x:String">[jobPageUrl]</OutArgument>
                   </Assign.To>
                   <Assign.Value>
-                    <InArgument x:TypeArguments="s:String[]">[inputJSONobj.Item("jobDesc").Values(Of String).ToArray()]</InArgument>
+                    <InArgument x:TypeArguments="x:String">[inputJSONobj.Item("jobPageUrl").Value(Of String)]</InArgument>
                   </Assign.Value>
                 </Assign>
                 <Assign sap2010:WorkflowViewState.IdRef="Assign_3">
@@ -122,7 +122,7 @@
                 <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_14">
                   <ui:CommentOut.Body>
                     <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_62">
-                      <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message box" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[&quot;JOBS:&quot; +String.Join(&quot;,&quot; , jobKeywords)]" TopMost="True" />
+                      <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message box" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[&quot;JOBS:&quot; +String.Join(&quot;,&quot; , jobPageUrl)]" TopMost="True" />
                     </Sequence>
                   </ui:CommentOut.Body>
                 </ui:CommentOut>
@@ -149,29 +149,37 @@
         <FlowStep.Next>
           <FlowStep x:Name="__ReferenceID1" sap2010:WorkflowViewState.IdRef="FlowStep_8">
             <Sequence DisplayName="Prepare and Open Job Page" sap2010:WorkflowViewState.IdRef="Sequence_9">
-              <ui:OpenBrowser UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Make sure you logged in first" Hidden="False" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" NewSession="True" Private="False" Url="https://angel.co/jobs#find/f!%7B%22locations%22%3A%5B%221688-United%20States%22%5D%2C%22roles%22%3A%5B%22Software%20Engineer%22%5D%2C%22keywords%22%3A%5B%22Bluetooth%22%5D%7D">
+              <ui:OpenBrowser UiBrowser="{x:Null}" BrowserType="Chrome" DisplayName="Make sure you logged in first" Hidden="False" sap2010:WorkflowViewState.IdRef="OpenBrowser_1" NewSession="True" Private="False" Url="[jobPageUrl]">
                 <ui:OpenBrowser.Body>
                   <ActivityAction x:TypeArguments="x:Object">
                     <ActivityAction.Argument>
                       <DelegateInArgument x:TypeArguments="x:Object" Name="ContextTarget" />
                     </ActivityAction.Argument>
                     <Sequence DisplayName="Do" sap2010:WorkflowViewState.IdRef="Sequence_10">
-                      <ui:ForEach x:TypeArguments="x:String" DisplayName="For each" sap2010:WorkflowViewState.IdRef="ForEach`1_5" Values="[jobKeywords]">
-                        <ui:ForEach.Body>
-                          <ActivityAction x:TypeArguments="x:String">
-                            <ActivityAction.Argument>
-                              <DelegateInArgument x:TypeArguments="x:String" Name="keyword" />
-                            </ActivityAction.Argument>
-                            <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_12">
-                              <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="300" DisplayName="Type into 'DIV'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[keyword+ &quot;[k(enter)]&quot;]">
-                                <ui:TypeInto.Target>
-                                  <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6c83536c0847868b92edfdf62fd979cb" Selector="&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div' idx='1' parentid='startups_content' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
-                                </ui:TypeInto.Target>
-                              </ui:TypeInto>
-                            </Sequence>
-                          </ActivityAction>
-                        </ui:ForEach.Body>
-                      </ui:ForEach>
+                      <ui:CommentOut DisplayName="Comment out">
+                        <ui:CommentOut.Body>
+                          <Sequence DisplayName="Ignored Activities">
+                            <ui:ForEach x:TypeArguments="x:String" DisplayName="For each" sap2010:WorkflowViewState.IdRef="ForEach`1_5" Values="[jobPageUrl]">
+                              <ui:ForEach.Body>
+                                <ActivityAction x:TypeArguments="x:String">
+                                  <ActivityAction.Argument>
+                                    <DelegateInArgument x:TypeArguments="x:String" Name="keyword" />
+                                  </ActivityAction.Argument>
+                                  <Sequence DisplayName="Body" sap2010:WorkflowViewState.IdRef="Sequence_12">
+                                    <ui:TypeInto DelayBefore="{x:Null}" DelayBetweenKeys="{x:Null}" Activate="True" ClickBeforeTyping="True" DelayMS="300" DisplayName="Type into 'DIV'" EmptyField="False" sap2010:WorkflowViewState.IdRef="TypeInto_1" SendWindowMessages="False" SimulateType="False" Text="[keyword+ &quot;[k(enter)]&quot;]">
+                                      <ui:TypeInto.Target>
+                                        <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="6c83536c0847868b92edfdf62fd979cb" Selector="&lt;webctrl css-selector='body&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div&amp;gt;div' idx='1' parentid='startups_content' tag='DIV' /&gt;" WaitForReady="INTERACTIVE" />
+                                      </ui:TypeInto.Target>
+                                    </ui:TypeInto>
+                                  </Sequence>
+                                </ActivityAction>
+                              </ui:ForEach.Body>
+                            </ui:ForEach>
+                            <sap2010:WorkflowViewState.IdRef>Sequence_96</sap2010:WorkflowViewState.IdRef>
+                          </Sequence>
+                        </ui:CommentOut.Body>
+                        <sap2010:WorkflowViewState.IdRef>CommentOut_25</sap2010:WorkflowViewState.IdRef>
+                      </ui:CommentOut>
                       <While sap2010:WorkflowViewState.IdRef="While_1">
                         <While.Variables>
                           <Variable x:TypeArguments="x:String" Default="1" Name="Y" />
@@ -238,23 +246,19 @@
                                 <ui:Target ClippingRegion="{x:Null}" Element="{x:Null}" TimeoutMS="{x:Null}" InformativeScreenshot="cbf45b015a924a1fb48f5ebdf3bce049" Selector="&lt;webctrl id='startups_content' tag='DIV' /&gt;" WaitForReady="COMPLETE" />
                               </ui:ExtractData.Target>
                             </ui:ExtractData>
-                            <ui:CommentOut DisplayName="Comment out">
+                            <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_23">
                               <ui:CommentOut.Body>
-                                <Sequence DisplayName="Ignored Activities">
+                                <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_94">
                                   <ui:OutputDataTable DataTable="[ExtractDataTable]" DisplayName="Output data table" sap2010:WorkflowViewState.IdRef="OutputDataTable_5" Text="[DataTableString]" />
-                                  <sap2010:WorkflowViewState.IdRef>Sequence_94</sap2010:WorkflowViewState.IdRef>
                                 </Sequence>
                               </ui:CommentOut.Body>
-                              <sap2010:WorkflowViewState.IdRef>CommentOut_23</sap2010:WorkflowViewState.IdRef>
                             </ui:CommentOut>
-                            <ui:CommentOut DisplayName="Comment out">
+                            <ui:CommentOut DisplayName="Comment out" sap2010:WorkflowViewState.IdRef="CommentOut_24">
                               <ui:CommentOut.Body>
-                                <Sequence DisplayName="Ignored Activities">
+                                <Sequence DisplayName="Ignored Activities" sap2010:WorkflowViewState.IdRef="Sequence_95">
                                   <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" Buttons="Ok" DisplayName="Message box" sap2010:WorkflowViewState.IdRef="MessageBox_9" Text="[DataTableString]" TopMost="True" />
-                                  <sap2010:WorkflowViewState.IdRef>Sequence_95</sap2010:WorkflowViewState.IdRef>
                                 </Sequence>
                               </ui:CommentOut.Body>
-                              <sap2010:WorkflowViewState.IdRef>CommentOut_24</sap2010:WorkflowViewState.IdRef>
                             </ui:CommentOut>
                           </Sequence>
                         </ActivityAction>
@@ -501,7 +505,7 @@
     <x:Reference>__ReferenceID1</x:Reference>
     <x:Reference>__ReferenceID2</x:Reference>
     <x:Reference>__ReferenceID3</x:Reference>
-    <sads:DebugSymbol.Symbol>d0ZEOlxwcm9qZWN0XFVpUGF0aCBQcm9qZWN0c1xSb2JvdGljUmVzdW1lQXV0b21hdGlvblxBbmdlbExpc3RcTWFpbi54YW1slgFGA/kDDwIBAUs4S1UCAQJQCZQBFAMBlwGXAQ3dARgCAXLgARGIAhwCAWOLAhXrAyUCAQNVC5MBFgMBmAGYAQ/cASACAXPhAROHAh4CAWSLAi6LAkICAWGRAhvoAyYCAQRXD4gBGgMBmQGYAdoBmAGKAwMBlgGeARXZASACAXTiARWGAicCAWWWAk2WAlQCAQWYAh3nAy4CAQZYEViwAQMBsQFZEVnPAQMBrAFaEWEaAwGoAWIRaRoDAaQBahFxGgMBoAFyEXkaAwGcAXoRgAEhAwGbAYEBEYcBIQMBmgGfAReuASQDAY0BrwEX2AEfAgF14gGwAuIB8gICAXHoARuDAiYCAWaYAsgBmALXAQIBX5gC3AGYAvYBAgFengIj5AM1AgEHWF5YZQMBtQFYb1h8AwG0AVgqWDcDAbIBWb8BWcwBAwGvAVmjAVmzAQMBrQFfPl94AwGrAVw/XEwDAakBZzxnbQMBpwFkPWRIAwGlAW8+b4EBAwGjAWw/bFEDAaEBdz53gQEDAZ8BdD90UQMBnQGfAYoBnwGZAQMBlAGlAR2rASgDAY4BsQFIsQFLAgF3sgFIsgFLAgF2tQEZ1wEkAgF7tAEqtAE/AgF47AEd8AEuAgFp8QEd+QEtAgFo+gEdggItAgFnngKRAZ4CoAECAVykAinhAzQCAQimAR+qAS0DAY8BuQEbwAEkAwGIAcEBG8UBKwMBhwHGARvGAWIDAYUBxwEbzgEvAwGBAc8BG9YBJAIBfOwBsgfsAbcHAgFw7gGwAe4B4wECAW/sAZMB7AGYAQIBbuwBWewBXwIBbewBauwBfgIBa+wB5wHsAe0GAgFqpQIr4AI2AgFJ4QIr5QI8AgFB5gIr7AI7AgFA7QIr8wI7AgE/9AIr3wM7AgEM4AMr4AOXAQIBCagBsgGoAYsDAwGTAaYBkAGmAZUBAwGSAaYBqQKmAcwCAwGQAb4BRr4BVAMBiwG7AUe7AU4DAYkBxgErxgE1AwGGAckBR8kBTQMBgwHHAaUBxwGxAQMBggHUAUbUAVcCAX/RAUfRAUoCAX2mAi2tAj0CAVeuAi20Aj0CAVa1Ai3fAjICAUrhAskF4QLOBQIBSOMCvgHjAqQCAgFH4QKkAeECqQECAUbhAmfhAm0CAUXhAnjhAo8BAgFD4QLlAeEChQUCAUL0AkT0AlsCAT36AjHcAzwCAQ3gA0DgA08CAQqrAocBqwKNAQIBW6YCZaYCdQIBWagCW6gCYQIBWLUCO7UCSwIBS7cCMd0CPAIBTfwCY/wCagIBDv4CM4QDQwIBPIUDM5sDQAIBMpwDM7IDQAIBKLMDM9sDOAIBD7gCM8kCQwIBU8oCM8oCegIBUcsCM9wCQwIBToUDpgGFA7oBAgE6iwM5mANEAgEznAOmAZwDugECATCiAzmvA0QCASmzA0GzA00CARC1AzfZA0ICARLHAo0BxwLAAQIBVcQCYcQCZgIBVMoCQ8oCTQIBUtoCjQHaAsABAgFQ1wJh1wJmAgFPjAM7lwNAAgE0owM7rgNAAgEqtgM5tgPFAQIBJrcDOdcDRAIBFNgDOdgDbwIBE4wDSYwDgAECATWOAz+VA0gCATajA0mjA4ABAgErpQM/rANIAgEstgOoAbYDwgECASe4Azu/A0YCASLAAzvWA0YCARWTA2uTA28CATmQA2yQA3YCATeqA2uqA3ACAS+nA2ynA3YCAS29A84BvQP9AQIBJboDaLoDbAIBJLoDWroDXwIBI8EDPcUDSwIBHsYDPc0DSAIBGs4DPdUDSAIBFsMD0AHDA+4CAgEhwQPRAsED3gICAR/LA9ABywOoAgIBHcgDasgDbgIBHMgDXMgDYQIBG9MD0AHTA50CAgEZ0ANp0ANtAgEY0ANc0ANgAgEX</sads:DebugSymbol.Symbol>
+    <sads:DebugSymbol.Symbol>d0ZEOlxwcm9qZWN0XFVpUGF0aCBQcm9qZWN0c1xSb2JvdGljUmVzdW1lQXV0b21hdGlvblxBbmdlbExpc3RcTWFpbi54YW1skAFGA/0DDwIBAUs4S1UCAQJQCZQBFAMBkAGXAQ3lARgCAXLoARGMAhwCAWOPAhXvAyUCAQNVC5MBFgMBkQGYAQ/kASACAXPpAROLAh4CAWSPAi6PAkICAWGVAhvsAyYCAQRXD4gBGgMBkgGYAdoBmAHoAQMBjgGeARXhASACAXTqARWKAicCAWWaAk2aAlQCAQWcAh3rAy4CAQZYEViwAQMBqgFZEVnPAQMBpQFaEWEaAwGhAWIRaRoDAZ0BahFxGgMBmQFyEXkaAwGVAXoRgAEhAwGUAYEBEYcBIQMBkwGfARe2AScDAY0BtwEX4AEfAgF16gGwAuoB8gICAXHwARuHAiYCAWacAsgBnALXAQIBX5wC3AGcAvYBAgFeogIj6AM1AgEHWF5YZQMBrgFYb1h8AwGtAVgqWDcDAasBWb8BWcwBAwGoAVmjAVmzAQMBpgFfPF9uAwGkAVw9XEkDAaIBZzxnbQMBoAFkPWRIAwGeAW8+b4EBAwGcAWw/bFEDAZoBdz53gQEDAZgBdD90UQMBlgG5AUi5AUsCAXe6AUi6AUsCAXa9ARnfASQCAXu8ASq8AT8CAXj0AR34AS4CAWn5AR3/AS0CAWiAAh2GAi0CAWeiApEBogKgAQIBXKgCKeUDNAIBCMEBG8gBJAMBiAHJARvNASsDAYcBzgEbzgFiAwGFAc8BG9YBLwMBgQHXARveASQCAXz0AbIH9AG3BwIBcPYBsAH2AeMBAgFv9AGTAfQBmAECAW70AVn0AV8CAW30AWr0AX4CAWv0AecB9AHtBgIBaqkCK+QCNgIBSeUCK+kCPAIBQeoCK/ACOwIBQPECK/cCOwIBP/gCK+MDOwIBDOQDK+QDlwECAQnGAUbGAVQDAYsBwwFHwwFOAwGJAc4BK84BNQMBhgHRAUfRAU0DAYMBzwGlAc8BsQEDAYIB3AFG3AFXAgF/2QFH2QFKAgF9qgItsQI9AgFXsgItuAI9AgFWuQIt4wIyAgFK5QLJBeUCzgUCAUjnAr4B5wKkAgIBR+UCpAHlAqkBAgFG5QJn5QJtAgFF5QJ45QKPAQIBQ+UC5QHlAoUFAgFC+AJE+AJbAgE9/gIx4AM8AgEN5ANA5ANPAgEKrwKHAa8CjQECAVuqAmWqAnUCAVmsAlusAmECAVi5Aju5AksCAUu7AjHhAjwCAU2AA2OAA2oCAQ6CAzOIA0MCATyJAzOfA0ACATKgAzO2A0ACASi3AzPfAzgCAQ+8AjPNAkMCAVPOAjPOAnoCAVHPAjPgAkMCAU6JA6YBiQO6AQIBOo8DOZwDRAIBM6ADpgGgA7oBAgEwpgM5swNEAgEptwNBtwNNAgEQuQM33QNCAgESywKNAcsCwAECAVXIAmHIAmYCAVTOAkPOAk0CAVLeAo0B3gLAAQIBUNsCYdsCZgIBT5ADO5sDQAIBNKcDO7IDQAIBKroDOboDxQECASa7AznbA0QCARTcAzncA28CAROQA0mQA4ABAgE1kgM/mQNIAgE2pwNJpwOAAQIBK6kDP7ADSAIBLLoDqAG6A8IBAgEnvAM7wwNGAgEixAM72gNGAgEVlwNrlwNvAgE5lANslAN2AgE3rgNrrgNwAgEvqwNsqwN2AgEtwQPOAcED/QECASW+A2i+A2wCASS+A1q+A18CASPFAz3JA0sCAR7KAz3RA0gCARrSAz3ZA0gCARbHA9ABxwPuAgIBIcUD0QLFA94CAgEfzwPQAc8DqAICAR3MA2rMA24CARzMA1zMA2ECARvXA9AB1wOdAgIBGdQDadQDbQIBGNQDXNQDYAIBFw==</sads:DebugSymbol.Symbol>
   </Flowchart>
   <sap2010:WorkflowViewState.ViewStateManager>
     <sap2010:ViewStateManager>
@@ -561,7 +565,15 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="ForEach`1_5" sap:VirtualizedContainerService.HintSize="464,391" />
+      <sap2010:ViewStateData Id="ForEach`1_5" sap:VirtualizedContainerService.HintSize="352,391" />
+      <sap2010:ViewStateData Id="Sequence_96" sap:VirtualizedContainerService.HintSize="374,515">
+        <sap:WorkflowViewStateService.ViewState>
+          <scg:Dictionary x:TypeArguments="x:String, x:Object">
+            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+          </scg:Dictionary>
+        </sap:WorkflowViewStateService.ViewState>
+      </sap2010:ViewStateData>
+      <sap2010:ViewStateData Id="CommentOut_25" sap:VirtualizedContainerService.HintSize="464,593" />
       <sap2010:ViewStateData Id="Assign_4" sap:VirtualizedContainerService.HintSize="314,60" />
       <sap2010:ViewStateData Id="SendHotkey_1" sap:VirtualizedContainerService.HintSize="314,116" />
       <sap2010:ViewStateData Id="Delay_1" sap:VirtualizedContainerService.HintSize="314,22" />
@@ -575,15 +587,15 @@
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
       <sap2010:ViewStateData Id="While_1" sap:VirtualizedContainerService.HintSize="464,795" />
-      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="486,1350">
+      <sap2010:ViewStateData Id="Sequence_10" sap:VirtualizedContainerService.HintSize="486,1552">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="OpenBrowser_1" sap:VirtualizedContainerService.HintSize="500,1449" />
-      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="200,51">
+      <sap2010:ViewStateData Id="OpenBrowser_1" sap:VirtualizedContainerService.HintSize="500,1651" />
+      <sap2010:ViewStateData Id="Sequence_9" sap:VirtualizedContainerService.HintSize="522,1775">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
@@ -624,7 +636,7 @@
           </scg:Dictionary>
         </sap:WorkflowViewStateService.ViewState>
       </sap2010:ViewStateData>
-      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="496,1189">
+      <sap2010:ViewStateData Id="Sequence_11" sap:VirtualizedContainerService.HintSize="200,51">
         <sap:WorkflowViewStateService.ViewState>
           <scg:Dictionary x:TypeArguments="x:String, x:Object">
             <x:Boolean x:Key="IsExpanded">True</x:Boolean>
