@@ -1,6 +1,6 @@
 {
-	"jobPageUrl":["https://angel.co/jobs#find/f!%7B%22locations%22%3A%5B%221688-United%20States%22%5D%2C%22roles%22%3A%5B%22Software%20Engineer%22%5D%2C%22keywords%22%3A%5B%22Bluetooth%22%5D%7D"],
-	"jobTitleIncludes":["oftware","stack","Stack"],
-	"jobTitleExcludes":["ackend","ontractor","ntern","eveloper"],
-	"selfIntro":"Hi, I'm a software engineer specialized in Bluetooth, I am also experienced with RPA, Mobile/Fullstack Development. H1B sponsorship is appreciated but not necessary"
+	"jobPageUrl":"https://angel.co/jobs#find/f!%7B%22keywords%22%3A%5B%22software%20engineer%22%5D%2C%22locations%22%3A%5B%221701-Mountain%20View%2C%20CA%22%5D%7D",
+	"jobTitleIncludes":["oftware","stack","Stack", "Automation"],
+	"jobTitleExcludes":["ackend","ontractor","ntern","Rails", "Test", "Lead"],
+	"selfIntro":"Hi, I'm a software engineer specialized in Bluetooth, I am also familiar with RPA, Fullstack Development, Mobile Application(android). H1B sponsorship is appreciated but not necessary. Please feel free to contact me if you see a potential fit for different position."
 }
